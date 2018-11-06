@@ -2,14 +2,14 @@
 'use strict';
 const Alexa = require('alexa-sdk');
 
-const APP_ID = 'amzn1.ask.skill.0371c1f8-8433-40bc-958d-00c0a97dee2b';
+const APP_ID = 'amzn1.ask.skill.d19a5a3e-d8fb-4036-bf6b-90045a45d122';
 
-const SKILL_NAME = 'Infinity Club';
-const HELP_MESSAGE = 'Welcome to the alexa skill for Infinity club! You can ask the skill to introduce';
+const SKILL_NAME = 'Food Buddy';
+const HELP_MESSAGE = 'You can use this skill to order food';
 const HELP_REPROMPT = 'How Can I help you Today?';
 const STOP_MESSAGE = 'Goodbye Folks!';
 
-const Intro = 'Welcome to Infinity! Infinity is an initiative by some students of Department of Computer Science and Engineering, Amal Jyothi College of Engineering. At infinity, we encourage you to develop and upgrade your skills. We meet after class hours, to discuss new technologies and problems faced by our budding developers. Welcome to INFINITY once again! we hope you have a great time '
+const Intro = 'Use me to hear whats on the menu today, place an order or remove an order'
 
 
 const handlers = {
