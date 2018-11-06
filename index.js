@@ -21,7 +21,7 @@ const handlers = {
         this.response.speak(speechOutput);
         this.emit(':responseReady');
     },
-	'GetMenu': function () {
+	'GetMenuIntent': function () {
 		const url = `https://9nfmj2dq1f.execute-api.ap-south-1.amazonaws.com/Development/menu/get-all`;
 		let speechOutput = "Items on today's menu are : ";
 		request.get(url, (error, response, body) => {
@@ -45,9 +45,9 @@ const handlers = {
         this.response.speak(speechOutput);
         this.emit(':responseReady');
 	},
-	'PlaceOrder': function () {
+	'PlaceOrderIntent': function () {
 	},
-	'ViewOrder': function () {
+	'ViewOrderIntent': function () {
 	},
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
