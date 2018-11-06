@@ -40,9 +40,10 @@ const handlers = {
 				speechOutput = speechOutput + ".";
 			}
 		}	
-		}),
-        this.response.cardRenderer(SKILL_NAME, speechOutput);
-        this.response.speak(speechOutput);
+		});
+		const speech = speechOutput
+        this.response.cardRenderer(SKILL_NAME, speech);
+        this.response.speak(speech);
         this.emit(':responseReady');
 	},
 	'PlaceOrderIntent': function () {
