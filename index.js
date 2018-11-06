@@ -1,15 +1,15 @@
-
 'use strict';
 const Alexa = require('alexa-sdk');
+const request = require('request');
 
 const APP_ID = 'amzn1.ask.skill.d19a5a3e-d8fb-4036-bf6b-90045a45d122';
 
 const SKILL_NAME = 'Food Buddy';
-const HELP_MESSAGE = 'You can use this skill to order food';
+const HELP_MESSAGE = 'Welcome to Food Buddy! you can use this skill to place an order';
 const HELP_REPROMPT = 'How Can I help you Today?';
 const STOP_MESSAGE = 'Goodbye Folks!';
 
-const Intro = 'Use me to hear whats on the menu today, place an order or remove an order'
+const Intro = HELP_MESSAGE;
 
 const handlers = {
     'LaunchRequest': function () {
@@ -21,6 +21,34 @@ const handlers = {
         this.response.speak(speechOutput);
         this.emit(':responseReady');
     },
+	'GetMenu': function () {
+		const url = `https://9nfmj2dq1f.execute-api.ap-south-1.amazonaws.com/Development/menu/get-all`;
+		let speechOutput = "Items on today's menu are : ";
+		request.get(url, (error, response, body) => {
+		let responseObj = JSON.parse(body);
+		let arindex = responseObj.Menu_ITEMS.length;
+		for (i=0;i<arindex;i++) {
+			speechOutput = speechOutput + responseObj.Menu_ITEMS[i].ItemName;
+			speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].ItemPrice;
+			if (i < (arindex-2)){
+				speechOutput = speechOutput + ", ";
+			}
+			else if (i == arindex-2){
+				speechOutput = speechOutput + " and ";
+			}
+			else if (i == arindex-1){
+				speechOutput = speechOutput + ".";
+			}
+		}	
+		}),
+        this.response.cardRenderer(SKILL_NAME, speechOutput);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+	},
+	'PlaceOrder': function () {
+	},
+	'ViewOrder': function () {
+	},
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
         const reprompt = HELP_REPROMPT;
