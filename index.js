@@ -11,7 +11,6 @@ const STOP_MESSAGE = 'Goodbye Folks!';
 
 const Intro = 'Use me to hear whats on the menu today, place an order or remove an order'
 
-
 const handlers = {
     'LaunchRequest': function () {
         this.emit('Introduce');
