@@ -1,0 +1,23 @@
+{
+  "name": "foodstore",
+  "version": "1.0.0",
+  "description": "Alexa Cook Book for calling external APIs.\r Sample program for Infinity Bootcamp by Infinity Club of Computer Scince and Engineering Department, Amal Jyothi College of Engineering.\r Uses APIs stored in AWS Lambda to place an order, fetch orders, fetch menu items, and delete order for placing food.\r Complete code will be cross compatible across web, iOS, Android apps.\r APIs by Martin Siby.\r Alexa Principal Design by Bobby Isac.\r Supported by onebyzero.club",
+  "main": "index.js",
+  "dependencies": {
+    "alexa-sdk": "^1.0.25"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobbyisac/alexa-order-food.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bobbyisac/alexa-order-food/issues"
+  },
+  "homepage": "https://github.com/bobbyisac/alexa-order-food#readme"
+}
