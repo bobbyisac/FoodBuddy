@@ -27,6 +27,7 @@ const handlers = {
 		request.get(url, (error, response, body) => {
 		let responseObj = JSON.parse(body);
 		let arindex = responseObj.Menu_ITEMS.length;
+		let i;
 		for (i=0;i<arindex;i++) {
 			speechOutput = speechOutput + responseObj.Menu_ITEMS[i].ItemName;
 			speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].Price;
