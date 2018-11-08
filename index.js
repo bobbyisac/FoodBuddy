@@ -23,11 +23,11 @@ const handlers = {
     },
 	'GetMenuIntent': function () {
 		const url = `https://9nfmj2dq1f.execute-api.ap-south-1.amazonaws.com/Development/menu/get-all`;
-		var speechOutput = "Items on today's menu are : ";
+		let speechOutput = "Items on today's menu are : ";
 		request.get(url, (error, response, body) => {
-		var responseObj = JSON.parse(body);
-		var arindex = responseObj.Menu_ITEMS.length;
-		var i;
+		let responseObj = JSON.parse(body);
+		let arindex = responseObj.Menu_ITEMS.length;
+		let i;
 		for (i=0;i<arindex;i++) {
 			speechOutput = speechOutput + responseObj.Menu_ITEMS[i].ItemName;
 			speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].Price;
@@ -42,7 +42,6 @@ const handlers = {
 			}
 		}	
 		});
-		console.log("speech:",speechOutput);
         this.response.cardRenderer(SKILL_NAME, speechOutput);
         this.response.speak(speechOutput);
         this.emit(':responseReady');
