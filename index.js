@@ -29,7 +29,7 @@ const handlers = {
 		let arindex = responseObj.Menu_ITEMS.length;
 		for (i=0;i<arindex;i++) {
 			speechOutput = speechOutput + responseObj.Menu_ITEMS[i].ItemName;
-			speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].ItemPrice;
+			speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].Price;
 			if (i < (arindex-2)){
 				speechOutput = speechOutput + ", ";
 			}
