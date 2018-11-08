@@ -42,8 +42,8 @@ const handlers = {
 			}
 		}	
 		});
-		const speech = speechOutput
-        this.response.cardRenderer(SKILL_NAME, speech);
+		console.log("speech:",speechOutput);
+        this.response.cardRenderer(SKILL_NAME, speechOutput);
         this.response.speak(speech);
         this.emit(':responseReady');
 	},
