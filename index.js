@@ -22,29 +22,45 @@ const handlers = {
         this.emit(':responseReady');
     },
 	'GetMenuIntent': function () {
+		const request = require('request');
 		const url = `https://9nfmj2dq1f.execute-api.ap-south-1.amazonaws.com/Development/menu/get-all`;
 		let speechOutput = "Items on today's menu are : ";
+		var self=this;
+		new Promise(function(resolve, reject) {
 		request.get(url, (error, response, body) => {
-		let responseObj = JSON.parse(body);
-		let arindex = responseObj.Menu_ITEMS.length;
-		let i;
-		for (i=0;i<arindex;i++) {
-			speechOutput = speechOutput + responseObj.Menu_ITEMS[i].ItemName;
-			speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].Price;
-			if (i < (arindex-2)){
-				speechOutput = speechOutput + ", ";
-			}
-			else if (i == arindex-2){
-				speechOutput = speechOutput + " and ";
-			}
-			else if (i == arindex-1){
-				speechOutput = speechOutput + ".";
-			}
-		}	
+			let responseObj = JSON.parse(body);
+			if (!error)
+		{
+				resolve([responseObj,self]);
+		}
+		else{
+			reject(error);
+		}
 		});
-        this.response.cardRenderer(SKILL_NAME, speechOutput);
-        this.response.speak(speechOutput);
-        this.emit(':responseReady');
+		}).then(function(a) { // (**)
+			let responseObj=a[0];
+			let self=a[1];
+			let arindex = responseObj.Menu_ITEMS.length;
+			let i;
+		for (i=0;i<arindex;i++) {
+				speechOutput = speechOutput + responseObj.Menu_ITEMS[i].ItemName;
+				speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].Price;
+				if (i < (arindex-2)){
+					speechOutput = speechOutput + ", ";
+				}
+				else if (i == arindex-2){
+					speechOutput = speechOutput + " and ";
+				}
+				else if (i == arindex-1){
+					speechOutput = speechOutput + ".";
+				}
+		}
+		console.log("speech:",speechOutput);
+		console.error("Error:",speechOutput);
+		self.response.cardRenderer(SKILL_NAME, speechOutput);
+		self.response.speak(speechOutput);
+		self.emit(':responseReady');
+	}).catch();
 	},
 	'PlaceOrderIntent': function () {
 	},
