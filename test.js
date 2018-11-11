@@ -62,10 +62,37 @@ const handlers = {
 	},
 	'PlaceOrderIntent': function () {
 		const request = require('request');
-		const url = 'https://9nfmj2dq1f.execute-api.ap-south-1.amazonaws.com/Development/orders/add-order';
+		const url1 = 'https://9nfmj2dq1f.execute-api.ap-south-1.amazonaws.com/Development/orders/add-order';
 		let speechOutput = "Order placed for ";
-		speechOutput = speechOutput + this.event.request.intent.slot.qty.value + " ";
-		speechOutput = speechOutput + this.event.request.intent.slot.menuItem.value;
+		
+		let filledSlots = delegateSlotCollection.call(this, function(event) {
+			let result = false;
+			let slots = event.request.intent.slots;
+
+			if(slots.menuItem.value) {
+				result = true;
+			}
+			return result;
+		});
+		
+		if (!filledSlots) {
+			return;
+		}
+		let slotValues = getSlotValues(filledSlots);
+		speechOutput = speechOutput + slotValues.menuItem.resolved;
+		let item1=slotValues.menuItem.resolved;
+		let data1={
+			 "IDNo":"1111",
+			 "OrderDate": formatDate(new Date()),
+			 "OrderedItems":item1
+			 };
+		request.post({
+			url: url1,
+			body: JSON.stringify(data1)
+		}, function(error, response, body){
+        console.log(body);
+		});
+		
 		this.response.cardRenderer(SKILL_NAME, speechOutput);
 		this.response.speak(speechOutput);
 		this.emit(':responseReady');
@@ -88,6 +115,69 @@ const handlers = {
         this.emit(':responseReady');
     },
 };
+
+function getSlotValues (filledSlots) {
+    let slotValues = {};
+    Object.keys(filledSlots).forEach(function(item) {
+    var name = filledSlots[item].name;
+    if(filledSlots[item]&&
+        filledSlots[item].resolutions &&
+        filledSlots[item].resolutions.resolutionsPerAuthority[0] &&
+        filledSlots[item].resolutions.resolutionsPerAuthority[0].status &&
+        filledSlots[item].resolutions.resolutionsPerAuthority[0].status.code ) {
+        switch (filledSlots[item].resolutions.resolutionsPerAuthority[0].status.code) {
+            case "ER_SUCCESS_MATCH":
+                slotValues[name] = {
+                    "synonym": filledSlots[item].value,
+                    "resolved": filledSlots[item].resolutions.resolutionsPerAuthority[0].values[0].value.name,
+                    "isValidated": true
+                };
+                break;
+            case "ER_SUCCESS_NO_MATCH":
+                slotValues[name] = {
+                    "synonym": filledSlots[item].value,
+                    "resolved": filledSlots[item].value,
+                    "isValidated":false
+                };
+                break;
+            }
+        } else {
+            slotValues[name] = {
+                "synonym": filledSlots[item].value,
+                "resolved": filledSlots[item].value,
+                "isValidated": false
+            };
+        }
+    },this);
+    return slotValues;
+}
+
+function delegateSlotCollection(func) {
+    if(func) {
+        if (func(this.event)) {
+            this.event.request.dialogState = "COMPLETED";
+            return this.event.request.intent.slots;
+        }
+    }
+
+    if (this.event.request.dialogState === "STARTED") {
+        var updatedIntent = this.event.request.intent;
+        this.emit(":delegate", updatedIntent);
+    } else if (this.event.request.dialogState !== "COMPLETED") {
+        this.emit(":delegate", updatedIntent);
+    } else {
+        return this.event.request.intent.slots;
+    }
+    return null;
+}
+
+function formatDate(date) {
+	var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	var day = date.getDate();
+	var monthIndex = date.getMonth();
+	var year = date.getFullYear();
+	return day + '-' + monthNames[monthIndex] + '-' + year.toString().slice(2,4);
+}
 
 exports.handler = function (event, context, callback) {
     const alexa = Alexa.handler(event, context, callback);
