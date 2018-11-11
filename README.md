@@ -4,4 +4,5 @@ Uses APIs stored in AWS Lambda to place an order, fetch orders, fetch menu items
 Complete code will be cross compatible across web, iOS, Android apps.
 APIs by Martin Siby.
 Alexa Principal Design by Bobby Isac.
+Code by Bobby Isac and Amit Binny Joseph.
 Supported by onebyzero.club

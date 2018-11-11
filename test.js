@@ -27,22 +27,22 @@ const handlers = {
 		let speechOutput = "Items on today's menu are : ";
 		var self=this;
 		new Promise(function(resolve, reject) {
-		request.get(url, (error, response, body) => {
-			let responseObj = JSON.parse(body);
-			if (!error)
-		{
-				resolve([responseObj,self]);
-		}
-		else{
-			reject(error);
-		}
-		});
-		}).then(function(a) { // (**)
+			request.get(url, (error, response, body) => {
+				let responseObj = JSON.parse(body);
+				if (!error)
+				{
+					resolve([responseObj,self]);
+				}
+				else{
+					reject(error);
+				}
+			});
+		}).then(function(a) {
 			let responseObj=a[0];
 			let self=a[1];
 			let arindex = responseObj.Menu_ITEMS.length;
 			let i;
-		for (i=0;i<arindex;i++) {
+			for (i=0;i<arindex;i++) {
 				speechOutput = speechOutput + responseObj.Menu_ITEMS[i].ItemName;
 				speechOutput = speechOutput + " priced at rupees " + responseObj.Menu_ITEMS[i].Price;
 				if (i < (arindex-2)){
@@ -54,15 +54,21 @@ const handlers = {
 				else if (i == arindex-1){
 					speechOutput = speechOutput + ".";
 				}
-		}
-		console.log("speech:",speechOutput);
-		console.error("Error:",speechOutput);
-		self.response.cardRenderer(SKILL_NAME, speechOutput);
-		self.response.speak(speechOutput);
-		self.emit(':responseReady');
-	}).catch();
+			}
+			self.response.cardRenderer(SKILL_NAME, speechOutput);
+			self.response.speak(speechOutput);
+			self.emit(':responseReady');
+		}).catch();
 	},
 	'PlaceOrderIntent': function () {
+		const request = require('request');
+		const url = 'https://9nfmj2dq1f.execute-api.ap-south-1.amazonaws.com/Development/orders/add-order';
+		let speechOutput = "Order placed for ";
+		speechOutput = speechOutput + this.event.request.intent.slot.qty.value + " ";
+		speechOutput = speechOutput + this.event.request.intent.slot.menuItem.value;
+		this.response.cardRenderer(SKILL_NAME, speechOutput);
+		this.response.speak(speechOutput);
+		this.emit(':responseReady');
 	},
 	'ViewOrderIntent': function () {
 	},
